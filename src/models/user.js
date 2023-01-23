@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.Task, {
+        foreignKey: 'userId'
+      });
     }
   }
   user.init({
@@ -22,9 +25,11 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         isEmail: true
       },
+      allowNull: false,
       type: DataTypes.STRING
     },
     password: {
+      allowNull: false,
       validate: {
         len: [3, 300]
       },
