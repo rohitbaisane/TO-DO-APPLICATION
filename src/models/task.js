@@ -27,9 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'uncompleted'
     },
     userId: {
-      type: DataTypes.Integer,
+      type: DataTypes.INTEGER,
       allowNull: false
-    },
+    }
+  }, {
     sequelize,
     modelName: 'Task',
   });
