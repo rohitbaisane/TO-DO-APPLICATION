@@ -22,6 +22,26 @@ const getTask = async (req, res) => {
     }
 }
 
+const getAllTasks = async (req, res) => {
+    try {
+        const task = await taskService.getAllTasks(req.query);
+        return res.status(200).json({
+            success: true,
+            data: task,
+            message: 'Successfully fetched all tasks',
+            err: {}
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: {},
+            messag: 'Can not fetch task',
+            err: err.message
+        });
+    }
+}
+
+
 const createTask = async (req, res) => {
 
     try {
@@ -84,6 +104,7 @@ const deleteTask = async (req, res) => {
 
 module.exports = {
     getTask,
+    getAllTasks,
     updateTask,
     deleteTask,
     createTask

@@ -18,6 +18,15 @@ class TaskService {
         }
     }
 
+    async getAllTasks(filter) {
+        try {
+            const tasks = await this.taskRepository.getAllTasks(filter);
+            return tasks;
+        } catch (err) {
+            console.log("Something went wrong on service layer");
+            throw err;
+        }
+    }
     async createTask(data) {
         try {
             const task = await this.taskRepository.createTask(data);

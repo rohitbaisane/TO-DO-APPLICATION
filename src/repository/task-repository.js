@@ -1,5 +1,5 @@
 const { Task } = require('../models/index');
-
+const { Op } = require('sequelize');
 class TaskRepository {
 
     #modifyFields(task, givenTask) {
@@ -11,6 +11,29 @@ class TaskRepository {
             task.status = givenTask.status;
         }
         return task;
+    }
+
+    async getAllTasks(filter) { //filter can by empty also
+
+        try {
+            if (filter.description) {
+                const tasks = await Task.findAll({
+                    where: {
+                        description: {
+                            [Op.startsWith]: filter.description
+                        }
+                    }
+                });
+                return tasks;
+            }
+            const tasks = await Task.findAll();
+            return tasks;
+        }
+        catch (err) {
+            console.log("Something went wrong on repository layer");
+            throw err;
+        }
+
     }
     async getTask(taskId) {
 
