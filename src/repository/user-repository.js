@@ -18,7 +18,7 @@ class UserRepository {
         }
     }
 
-    async getUser(userId) {
+    async getUserById(userId) {
         try {
             const user = await User.findByPk(userId);
             return user;
@@ -26,6 +26,22 @@ class UserRepository {
             console.log("Something went wrong on repository layer");
             throw err;
         }
+    }
+
+    async getUserByEmail(emailId) {
+        try {
+            const user = await User.findOne({
+                where: {
+                    email: emailId
+                }
+            });
+            return user;
+        }
+        catch (err) {
+            console.log("Something went wrong on repository layer");
+            throw err;
+        }
+
     }
 
     async updateUser(userId, data) {

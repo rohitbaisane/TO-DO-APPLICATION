@@ -1,4 +1,6 @@
 const { Task } = require('../models/index');
+const { User } = require('../models/index');
+
 const { Op } = require('sequelize');
 class TaskRepository {
 
@@ -13,32 +15,37 @@ class TaskRepository {
         return task;
     }
 
-    async getAllTasks(filter) { //filter can by empty also
-
-        try {
-            if (filter.description) {
-                const tasks = await Task.findAll({
-                    where: {
-                        description: {
-                            [Op.startsWith]: filter.description
-                        }
-                    }
-                });
-                return tasks;
+    #createCustomFilter(filter, userId) {
+        let filterObject = { where: {} };
+        if (filter.description) {
+            filterObject.where = {
+                description: {
+                    [Op.startsWith]: filter.description
+                }
             }
-            const tasks = await Task.findAll();
+        }
+        filterObject.where.userId = userId;
+        console.log(filterObject);
+        return filterObject;
+    }
+
+    async getAllTasks(filter, userId) { //filter can by empty also
+        try {
+            console.log(userId);
+            const filterObject = this.#createCustomFilter(filter, userId);
+            const tasks = await Task.findAll(filterObject);
             return tasks;
         }
         catch (err) {
+            console.log(err);
             console.log("Something went wrong on repository layer");
             throw err;
         }
 
     }
-    async getTask(taskId) {
-
+    async getTask(taskId, userId) {
         try {
-            const task = await Task.findByPk(taskId);
+            const task = await User.getTask(taskId);
             return task;
         } catch (err) {
             console.log("Something went wrong on repository layer");
@@ -48,7 +55,7 @@ class TaskRepository {
 
     async createTask({ description, userId }) {
         try {
-            const task = await Task.create({
+            const task = await User.createTask({
                 description,
                 userId
             });
@@ -59,15 +66,13 @@ class TaskRepository {
         }
     }
 
-    async updateTask({ description, status }, taskId) {
+    async updateTask({ description, status }, taskId, userId) {
         try {
-            const task = await Task.findByPk(taskId);
+            const task = await User.getTask(taskId);
             if (!task) {
                 throw new Error("Did not find taks for corssopnding id");
             }
-            console.log(task);
             const updatedTask = this.#modifyFields(task, { description, status });
-            console.log(updatedTask);
             await updatedTask.save();
             return updatedTask;
         } catch (err) {
@@ -77,11 +82,9 @@ class TaskRepository {
 
     }
 
-    async deleteTask(userId) {
+    async deleteTask(taskId, userId) {
         try {
-            await Task.destroy({
-                where: userId
-            });
+            await User.deleteTask(taskId, userId);
             return true;
         }
         catch (err) {

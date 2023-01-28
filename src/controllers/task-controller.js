@@ -5,7 +5,7 @@ const taskService = new TaskService();
 
 const getTask = async (req, res) => {
     try {
-        const task = await taskService.getTask(req.params.id);
+        const task = await taskService.getTask(req.params.id, req.user.id);
         return res.status(200).json({
             success: true,
             data: task,
@@ -24,7 +24,7 @@ const getTask = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
     try {
-        const task = await taskService.getAllTasks(req.query);
+        const task = await taskService.getAllTasks(req.query, req.user.id);
         return res.status(200).json({
             success: true,
             data: task,
@@ -45,7 +45,7 @@ const getAllTasks = async (req, res) => {
 const createTask = async (req, res) => {
 
     try {
-        const task = await taskService.createTask(req.body);
+        const task = await taskService.createTask({ ...req.body, userId: req.user.id });
         return res.status(201).json({
             success: true,
             data: task,
@@ -66,7 +66,7 @@ const createTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
     try {
-        const updatedTask = await taskService.updateTask(req.body, req.params.id);
+        const updatedTask = await taskService.updateTask(req.body, req.params.id, req.user.id);
         return res.status(201).json({
             success: true,
             data: updatedTask,
@@ -85,7 +85,7 @@ const updateTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
     try {
-        const response = await taskService.deleteTask(req.params.id);
+        const response = await taskService.deleteTask(req.params.id, req.user.id);
         return res.status(201).json({
             success: true,
             data: task,

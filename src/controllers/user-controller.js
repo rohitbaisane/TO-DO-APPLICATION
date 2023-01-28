@@ -4,7 +4,7 @@ const userService = new UserService();
 
 const getUser = async (req, res) => {
     try {
-        const user = await userService.getUser(req.params.id);
+        const user = await userService.getUserById(req.params.id);
         return res.status(200).json({
             success: true,
             message: 'Successfully fetched a user',
@@ -22,6 +22,25 @@ const getUser = async (req, res) => {
     }
 }
 
+const signIn = async (req, res) => {
+    try {
+        const response = await userService.signIn(req.body);
+        return res.status(201).json({
+            succes: true,
+            message: 'Sucessfully signed in',
+            data: response,
+            err: {}
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: true,
+            message: 'Something went wrong',
+            data: {},
+            err: err.message
+        });
+    }
+
+}
 const createUser = async (req, res) => {
     try {
         const user = await userService.createUser(req.body);
@@ -87,5 +106,6 @@ module.exports = {
     getUser,
     updateUser,
     deleteUser,
-    createUser
+    createUser,
+    signIn
 }
