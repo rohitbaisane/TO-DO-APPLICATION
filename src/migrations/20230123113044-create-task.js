@@ -13,10 +13,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      status: {
-        type: Sequelize.ENUM('completed', 'uncompleted'),
-        defaultValue: 'uncompleted'
-      },
       userId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

@@ -22,10 +22,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    status: {
-      type: DataTypes.ENUM('completed', 'uncompleted'),
-      defaultValue: 'uncompleted'
-    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false
