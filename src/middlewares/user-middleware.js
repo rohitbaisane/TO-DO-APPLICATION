@@ -11,17 +11,8 @@ const validateUserAuth = (req, res, next) => {
             success: false,
             data: {},
             message: 'Cannot validate user',
-            error: 'Missing mandatory parameters in req body'
+            error: 'Missing mandatory parameters in request body'
         });
-    }
-
-    //remove unncessary fields from req.body
-
-    const allowedFields = ['name', 'email', 'password'];
-    const keys = Object.keys(req.body);
-    for (let i = 0; i < keys; i++) {
-        if (!allowedFields.includes(keys[i]))
-            delete req.body[keys[i]];
     }
     next();
 }

@@ -4,6 +4,7 @@ const { userController } = require('../../controllers/index');
 const { taskController } = require('../../controllers/index');
 
 const { userRequest } = require('../../middlewares/index');
+const { validateTask } = require('../../middlewares/index');
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ router.delete('/user/:id', userRequest.authenticateUser, userController.deleteUs
 router.patch('/user/:id', userRequest.authenticateUser, userController.updateUser);
 router.post('/signin', userController.signIn);
 
-router.post('/task', userRequest.authenticateUser, taskController.createTask);
+router.post('/task', validateTask, userRequest.authenticateUser, taskController.createTask);
 router.get('/task/:id', userRequest.authenticateUser, taskController.getTask);
 router.patch('/task/:id', userRequest.authenticateUser, taskController.updateTask);
 router.delete('/task/:id', userRequest.authenticateUser, taskController.deleteTask);
