@@ -41,7 +41,6 @@ const authenticateUser = async (req, res, next) => {
         if (!user)
             throw { message: 'No user exists with corrosponding token' };
         req.user = user;
-        console.log(req.user);
         next();
     }
     catch (err) {

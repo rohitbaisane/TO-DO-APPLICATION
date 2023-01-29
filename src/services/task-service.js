@@ -49,6 +49,19 @@ class TaskService {
         }
     }
 
+    async deleteTask(taskId, userId) {
+        try {
+            const response = await this.taskRepository.deleteTask(taskId, userId);
+            return response;
+        }
+        catch (err) {
+            console.log("Something went wrong on repository layer");
+            throw err;
+        }
+    }
+
+
+
 }
 
 module.exports = TaskService

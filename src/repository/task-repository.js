@@ -45,7 +45,12 @@ class TaskRepository {
     }
     async getTask(taskId, userId) {
         try {
-            const task = await User.getTask(taskId);
+            const task = await Task.findOne({
+                where: {
+                    id: taskId,
+                    userId: userId
+                }
+            });
             return task;
         } catch (err) {
             console.log("Something went wrong on repository layer");
@@ -55,10 +60,7 @@ class TaskRepository {
 
     async createTask({ description, userId }) {
         try {
-            const task = await User.createTask({
-                description,
-                userId
-            });
+            const task = await Task.create({ description, userId });
             return task;
         } catch (err) {
             console.log("Something went wrong on repository layer");
@@ -68,7 +70,12 @@ class TaskRepository {
 
     async updateTask({ description, status }, taskId, userId) {
         try {
-            const task = await User.getTask(taskId);
+            const task = await Task.findOne({
+                where: {
+                    id: taskId,
+                    userId: userId
+                }
+            });
             if (!task) {
                 throw new Error("Did not find taks for corssopnding id");
             }
@@ -84,10 +91,16 @@ class TaskRepository {
 
     async deleteTask(taskId, userId) {
         try {
-            await User.deleteTask(taskId, userId);
+            await Task.destroy({
+                where: {
+                    id: taskId,
+                    userId: userId
+                }
+            })
             return true;
         }
         catch (err) {
+            console.log(err);
             console.log("Something went wrong on repository layer");
             throw err;
         }
